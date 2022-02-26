@@ -1,0 +1,20 @@
+.blog {
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  filter: drop-shadow(0 0.1rem 0.5rem #aeadad);
+}
+
+.content {
+  padding: 1rem 20%;
+  display: flex;
+}
+
+.footer {
+  text-align: center;
+}
