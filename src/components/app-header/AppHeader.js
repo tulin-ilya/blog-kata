@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { Typography } from 'antd';
 
@@ -8,7 +9,10 @@ const AppHeader = () => {
   const { Text } = Typography;
   return (
     <React.Fragment>
-      <Text strong>Realworld Blog</Text>
+      <Link to="/">
+        <Text strong>Realworld Blog</Text>
+      </Link>
+
       <UserMenu />
     </React.Fragment>
   );

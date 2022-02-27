@@ -14,11 +14,18 @@ import {
   Avatar,
   Tooltip,
 } from 'antd';
-import { HeartOutlined } from '@ant-design/icons';
+import { HeartFilled, HeartOutlined } from '@ant-design/icons';
 
 const ArtilcePreview = ({ article, isPreview }) => {
-  const { title, favoritesCount, tagList, author, createdAt, description } =
-    article;
+  const {
+    title,
+    favoritesCount,
+    tagList,
+    author,
+    createdAt,
+    description,
+    favorited,
+  } = article;
   const { username, image } = author;
 
   const { Text, Paragraph, Title } = Typography;
@@ -33,7 +40,11 @@ const ArtilcePreview = ({ article, isPreview }) => {
               </Title>
             </Tooltip>
             <span>
-              <Rate count={1} character={<HeartOutlined />} />
+              <Rate
+                count={1}
+                style={{ color: '#FF0707' }}
+                character={<HeartFilled />}
+              />
               <Text type="secondary" className="ant-rate-text">
                 {favoritesCount}
               </Text>

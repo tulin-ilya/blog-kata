@@ -21,7 +21,8 @@ const DELETE = 'DELETE';
 export default class KataBlogService {
   _apiBase = 'https://kata.academy:8021/api';
 
-  setQueryUrl(queryPath, articleSlug) {
+  setQueryUrl(queryPath, queryOptions) {
+    const { articleSlug, offset } = queryOptions;
     let url = '';
     switch (queryPath) {
       case CREATE_USER:
@@ -35,6 +36,8 @@ export default class KataBlogService {
         url = `${this._apiBase}/user`;
         break;
       case GET_ARTICLES:
+        url = `${this._apiBase}/articles?offset=${offset}`;
+        break;
       case CREATE_NEW_ARTICLE:
         url = `${this._apiBase}/articles`;
         break;
@@ -56,7 +59,7 @@ export default class KataBlogService {
   }
 
   async getResponse(queryPath, queryOptions) {
-    const url = this.setQueryUrl(queryPath, queryOptions.articleSlug);
+    const url = this.setQueryUrl(queryPath, queryOptions);
     const headers = { 'Content-type': 'application/json' };
     let body;
     let response;
@@ -152,9 +155,12 @@ export default class KataBlogService {
     return await response;
   }
 
-  async getArticles() {
-    const response = await this.getResponse(GET_ARTICLES, { requestType: GET });
-    return await response.articles;
+  async getArticles(offset = 0) {
+    const response = await this.getResponse(GET_ARTICLES, {
+      requestType: GET,
+      offset,
+    });
+    return await response;
   }
 
   async getArticle(articleSlug) {

@@ -1,24 +1,36 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { Card, List } from 'antd';
 
 import ArtilcePreview from '../../components/article-preview';
 
-import articlesBody from '../../articles';
+import { fetchArticles, setArticlesOffset } from './actions';
 
-const ArticlesList = () => {
-  const { articles, articlesCount } = articlesBody;
+const ArticlesList = ({ fetchArticles, setArticlesOffset, state }) => {
+  const { articlesList, articlesCount, articlesOffset } = state;
+
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  useEffect(() => {
+    fetchArticles(articlesOffset);
+    window.scrollTo(0, 0);
+  }, [articlesOffset]);
 
   const onPageClick = (page) => {
     const offset = (page - 1) * 20;
-    console.log(offset);
+    setArticlesOffset(offset);
   };
 
   return (
     <List
-      size="small"
+      grid={{ column: 1 }}
       itemLayout="vertical"
-      dataSource={articles}
+      dataSource={articlesList}
       pagination={{
         pageSize: 20,
         total: articlesCount,
@@ -39,4 +51,19 @@ const ArticlesList = () => {
   );
 };
 
-export default ArticlesList;
+ArticlesList.propTypes = {
+  fetchArticles: PropTypes.func.isRequired,
+  setArticlesOffset: PropTypes.func.isRequired,
+  state: PropTypes.shape().isRequired,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    state,
+  };
+};
+
+export default connect(mapStateToProps, {
+  fetchArticles,
+  setArticlesOffset,
+})(ArticlesList);
