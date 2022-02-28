@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -7,11 +6,22 @@ import { Card, List } from 'antd';
 
 import ArtilcePreview from '../../components/article-preview';
 
-import { fetchArticles, setArticlesOffset } from './actions';
+import {
+  fetchArticles,
+  setArticlesOffset,
+  setArticlesListPage,
+} from './actions';
 
-const ArticlesList = ({ fetchArticles, setArticlesOffset, state }) => {
-  const { articlesList, articlesCount, articlesOffset } = state;
-
+const ArticlesList = ({
+  fetchArticles,
+  setArticlesOffset,
+  setArticlesListPage,
+  articlesList,
+  articlesCount,
+  articlesOffset,
+  articlesListPage,
+}) => {
+  console.log(articlesListPage);
   useEffect(() => {
     fetchArticles();
   }, []);
@@ -22,23 +32,31 @@ const ArticlesList = ({ fetchArticles, setArticlesOffset, state }) => {
   }, [articlesOffset]);
 
   const onPageClick = (page) => {
+    setArticlesListPage(page);
     const offset = (page - 1) * 20;
     setArticlesOffset(offset);
   };
 
   return (
     <List
+      className="article-list"
+      loading={!articlesList.length ? true : false}
       grid={{ column: 1 }}
       itemLayout="vertical"
       dataSource={articlesList}
-      pagination={{
-        pageSize: 20,
-        total: articlesCount,
-        size: 'small',
-        showSizeChanger: false,
-        style: { textAlign: 'center' },
-        onChange: onPageClick,
-      }}
+      pagination={
+        !articlesList.length
+          ? false
+          : {
+              pageSize: 20,
+              total: articlesCount,
+              size: 'small',
+              showSizeChanger: false,
+              current: articlesListPage,
+              style: { textAlign: 'center' },
+              onChange: onPageClick,
+            }
+      }
       renderItem={(article) => {
         return (
           <List.Item key={article.slug}>
@@ -54,16 +72,26 @@ const ArticlesList = ({ fetchArticles, setArticlesOffset, state }) => {
 ArticlesList.propTypes = {
   fetchArticles: PropTypes.func.isRequired,
   setArticlesOffset: PropTypes.func.isRequired,
-  state: PropTypes.shape().isRequired,
+  articlesList: PropTypes.array.isRequired,
+  articlesCount: PropTypes.number.isRequired,
+  articlesOffset: PropTypes.number.isRequired,
+  articlesListPage: PropTypes.number.isRequired,
+  setArticlesListPage: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
+  const { articlesList, articlesCount, articlesOffset, articlesListPage } =
+    state;
   return {
-    state,
+    articlesList,
+    articlesCount,
+    articlesOffset,
+    articlesListPage,
   };
 };
 
 export default connect(mapStateToProps, {
   fetchArticles,
   setArticlesOffset,
+  setArticlesListPage,
 })(ArticlesList);

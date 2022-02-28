@@ -1,22 +1,49 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { useParams } from 'react-router-dom';
 
 import { Card, Typography } from 'antd';
+
 import ArtilcePreview from '../../components/article-preview';
 
-import articlesBody from '../../articles';
+import { fetchCurrentArticle } from './actions';
 
-const SingleArticle = () => {
+const SingleArticle = ({ fetchCurrentArticle, currentArticle }) => {
   const { Paragraph } = Typography;
-  const { articles } = articlesBody;
-  const article = articles[15];
+
+  const { articleSlug } = useParams();
+
+  useEffect(() => {
+    fetchCurrentArticle(articleSlug);
+  }, []);
+
+  useEffect(() => {
+    console.log(currentArticle);
+  }, [currentArticle]);
+
   return (
-    <Card
-      className="article-preview"
-      style={{ alignSelf: 'stretch', flexGrow: 1 }}>
-      <ArtilcePreview article={article} isPreview={false} />
-      <Paragraph style={{ marginTop: '1rem' }}>{article.body}</Paragraph>
+    // <div>hello</div>
+    <Card className="single-article">
+      <ArtilcePreview article={currentArticle} isPreview={false} />
+      <Paragraph style={{ marginTop: '1rem' }}>{currentArticle.body}</Paragraph>
     </Card>
   );
 };
 
-export default SingleArticle;
+SingleArticle.propTypes = {
+  fetchCurrentArticle: PropTypes.func.isRequired,
+  currentArticle: PropTypes.shape(),
+};
+
+const mapStateToProps = (state) => {
+  const { currentArticle } = state;
+  return {
+    currentArticle,
+  };
+};
+
+export default connect(mapStateToProps, {
+  fetchCurrentArticle,
+})(SingleArticle);

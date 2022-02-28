@@ -4,7 +4,8 @@ const kataBlogService = new KataBlogService();
 
 export const SET_ARTICLES_LIST = 'SET_ARTICLES_LIST';
 export const SET_ARTICLES_COUNT = 'SET_ARTICLES_COUNT';
-export const SET_ARTICLE_OFFSET = 'SET_ARTICLE_OFFSET';
+export const SET_ARTICLES_LIST_PAGE = 'SET_ARTICLE_LIST_PAGE';
+export const SET_ARTICLES_OFFSET = 'SET_ARTICLE_OFFSET';
 
 export const setArticlesList = (articlesList) => ({
   type: SET_ARTICLES_LIST,
@@ -14,8 +15,12 @@ export const setArticlesCount = (articlesCount) => ({
   type: SET_ARTICLES_COUNT,
   articlesCount,
 });
+export const setArticlesListPage = (articlesListPage) => ({
+  type: SET_ARTICLES_LIST_PAGE,
+  articlesListPage,
+});
 export const setArticlesOffset = (articlesOffset) => ({
-  type: SET_ARTICLE_OFFSET,
+  type: SET_ARTICLES_OFFSET,
   articlesOffset,
 });
 

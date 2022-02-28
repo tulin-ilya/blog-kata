@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import {
-  Card,
   Col,
   List,
   Rate,
@@ -14,10 +14,11 @@ import {
   Avatar,
   Tooltip,
 } from 'antd';
-import { HeartFilled, HeartOutlined } from '@ant-design/icons';
+import { HeartFilled } from '@ant-design/icons';
 
 const ArtilcePreview = ({ article, isPreview }) => {
   const {
+    slug,
     title,
     favoritesCount,
     tagList,
@@ -35,9 +36,13 @@ const ArtilcePreview = ({ article, isPreview }) => {
         <Space direction="vertical" style={{ maxWidth: '75%' }}>
           <Space>
             <Tooltip title={title}>
-              <Title style={{ marginBottom: 0, overflow: 'hidden' }} level={4}>
-                {title.length < 35 ? title : `${title.slice(0, 34)}...`}
-              </Title>
+              <Link to={`/articles/${slug}`}>
+                <Title
+                  style={{ marginBottom: 0, overflow: 'hidden' }}
+                  level={4}>
+                  {title.length < 35 ? title : `${title.slice(0, 34)}...`}
+                </Title>
+              </Link>
             </Tooltip>
             <span>
               <Rate
