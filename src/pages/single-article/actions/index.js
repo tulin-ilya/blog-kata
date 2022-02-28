@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import KataBlogService from '../../../serivces/kata-blog-api';
+import { setLoadingCondition } from '../../../containers/app/actions';
 
 const kataBlogService = new KataBlogService();
 
@@ -14,5 +15,6 @@ export const fetchCurrentArticle = (articleSlug) => {
   return async (dispatch) => {
     const data = await kataBlogService.getArticle(articleSlug);
     dispatch(setCurrentArticle(data.article));
+    dispatch(setLoadingCondition(false));
   };
 };

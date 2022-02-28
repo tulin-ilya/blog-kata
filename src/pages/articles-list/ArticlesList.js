@@ -11,6 +11,7 @@ import {
   setArticlesOffset,
   setArticlesListPage,
 } from './actions';
+import { setLoadingCondition } from '../../containers/app/actions';
 
 const ArticlesList = ({
   fetchArticles,
@@ -20,9 +21,11 @@ const ArticlesList = ({
   articlesCount,
   articlesOffset,
   articlesListPage,
+  loadingCondition,
+  setLoadingCondition,
 }) => {
-  console.log(articlesListPage);
   useEffect(() => {
+    setLoadingCondition(true);
     fetchArticles();
   }, []);
 
@@ -40,8 +43,8 @@ const ArticlesList = ({
   return (
     <List
       className="article-list"
-      loading={!articlesList.length ? true : false}
       grid={{ column: 1 }}
+      loading={loadingCondition}
       itemLayout="vertical"
       dataSource={articlesList}
       pagination={
@@ -77,16 +80,24 @@ ArticlesList.propTypes = {
   articlesOffset: PropTypes.number.isRequired,
   articlesListPage: PropTypes.number.isRequired,
   setArticlesListPage: PropTypes.func.isRequired,
+  loadingCondition: PropTypes.bool.isRequired,
+  setLoadingCondition: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
-  const { articlesList, articlesCount, articlesOffset, articlesListPage } =
-    state;
+  const {
+    articlesList,
+    articlesCount,
+    articlesOffset,
+    articlesListPage,
+    loadingCondition,
+  } = state;
   return {
     articlesList,
     articlesCount,
     articlesOffset,
     articlesListPage,
+    loadingCondition,
   };
 };
 
@@ -94,4 +105,5 @@ export default connect(mapStateToProps, {
   fetchArticles,
   setArticlesOffset,
   setArticlesListPage,
+  setLoadingCondition,
 })(ArticlesList);

@@ -5,6 +5,7 @@ import articlesList from './articlesList';
 import articlesOffset from './articlesOffset';
 import articlesListPage from './articlesListPage';
 import currentArticle from './currentArticle';
+import loadingCondition from './loadingCondition';
 
 export default combineReducers({
   articlesCount,
@@ -12,4 +13,5 @@ export default combineReducers({
   articlesListPage,
   articlesOffset,
   currentArticle,
+  loadingCondition,
 });

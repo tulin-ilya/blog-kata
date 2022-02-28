@@ -1,4 +1,6 @@
 import KataBlogService from '../../../serivces/kata-blog-api';
+import { setLoadingCondition } from '../../../containers/app/actions';
+import { setCurrentArticle } from '../../single-article/actions';
 
 const kataBlogService = new KataBlogService();
 
@@ -30,5 +32,7 @@ export const fetchArticles = (offset) => {
     const { articles, articlesCount } = data;
     dispatch(setArticlesList(articles));
     dispatch(setArticlesCount(articlesCount));
+    dispatch(setLoadingCondition(false));
+    dispatch(setCurrentArticle({}));
   };
 };
