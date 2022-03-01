@@ -39,12 +39,12 @@ const UserMenu = () => {
     </React.Fragment>
   ) : (
     <React.Fragment>
-      <Link to="/authorization">
+      <Link to="/login">
         <Button type="text" className="sign-in-button">
           Sign In
         </Button>
       </Link>
-      <Link to="/regisration">
+      <Link to="/registration">
         <Button className="sign-up-button">Sign Up</Button>
       </Link>
     </React.Fragment>

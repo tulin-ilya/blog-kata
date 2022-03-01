@@ -9,9 +9,10 @@ const AppContent = () => {
   return (
     <Routes>
       <Route path="/" element={<ArticlesList />} />
-      <Route path="/articles" element={<ArticlesList />} />
+      <Route path="/articles/" element={<ArticlesList />} />
       <Route path="/articles/:articleSlug" element={<SingleArticle />} />
-      <Route path="/regisration" element={<ProfileForm />} />
+      <Route path="/registration" element={<ProfileForm />} />
+      <Route path="/login" element={<ProfileForm />} />
     </Routes>
   );
 };
