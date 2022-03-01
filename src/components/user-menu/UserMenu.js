@@ -12,9 +12,11 @@ const UserMenu = () => {
 
   const profileMenuItems = (
     <Menu>
-      <Menu.Item key="edit">
-        <EditOutlined /> Edit profile
-      </Menu.Item>
+      <Link to='/edit-profile'>
+        <Menu.Item key="edit">
+          <EditOutlined /> Edit profile
+        </Menu.Item>
+      </Link>
       <Menu.Item key="out">
         <LogoutOutlined /> Log out
       </Menu.Item>
