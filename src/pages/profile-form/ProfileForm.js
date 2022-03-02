@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
+import {connect} from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import { USER_LOGIN, USER_REGISTRATION, EDIT_PROFILE } from './actions';
@@ -169,4 +170,10 @@ const ProfileForm = () => {
   );
 };
 
-export default ProfileForm;
+const mapStateToProps = (state) => {
+  return {state};
+}
+
+export default connect(mapStateToProps, {
+  
+})(ProfileForm);
