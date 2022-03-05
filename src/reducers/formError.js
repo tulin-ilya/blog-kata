@@ -1,6 +1,6 @@
-import { SET_FORM_ERROR } from '../pages/profile-form/actions';
+import { SET_FORM_ERROR } from "../pages/profile-form/actions";
 
-function formError(state = '', action) {
+function formError(state = {}, action) {
   switch (action.type) {
     case SET_FORM_ERROR:
       return action.formError;

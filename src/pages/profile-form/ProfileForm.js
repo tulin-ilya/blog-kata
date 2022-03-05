@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-// import { Redirect } from 'react-router-dom';
 
 import {
   USER_LOGIN,
@@ -14,22 +13,16 @@ import {
   setFormError,
 } from "./actions";
 
-import {
-  Card,
-  Form,
-  Input,
-  Checkbox,
-  Button,
-  Divider,
-  Typography,
-  message,
-} from "antd";
+import { Card, Form, Input, Checkbox, Button, Divider, Typography } from "antd";
 
-const userNameInput = (formError) => (
+const userNameInput = (formError, currentUser) => (
   <Form.Item
     label="Username"
     name="username"
+    value={currentUser.username}
     required={false}
+    validateStatus={formError.username ? "error" : ""}
+    help={formError.username || ""}
     rules={[{ required: true, message: "Please input your Username!" }]}
   >
     <Input placeholder="Username" />
@@ -41,7 +34,10 @@ const passwordInput = (formError) => (
     name="password"
     label="Password"
     required={false}
-    validateStatus={formError ? "error" : ""}
+    validateStatus={
+      formError.password || formError["email or password"] ? "error" : ""
+    }
+    help={formError.password}
     rules={[{ required: true, message: "Please input your password!" }]}
     hasFeedback
   >
@@ -74,11 +70,15 @@ const confirmPasswordInput = (
   </Form.Item>
 );
 
-const emailInput = (formError) => (
+const emailInput = (formError, currentUser) => (
   <Form.Item
     label="Email address"
     name="email"
-    validateStatus={formError ? "error" : ""}
+    value={currentUser.email}
+    validateStatus={
+      formError.email || formError["email or password"] ? "error" : ""
+    }
+    help={formError.email}
     required={false}
     rules={[{ required: true, message: "Please input your Email!" }]}
   >
@@ -125,10 +125,10 @@ const submitInput = (formCondition) => {
   );
 };
 
-const registerForm = (formError) => (
+const registerForm = (formError, currentUser) => (
   <React.Fragment>
-    {userNameInput(formError)}
-    {emailInput(formError)}
+    {userNameInput(formError, currentUser)}
+    {emailInput(formError, currentUser)}
     {passwordInput(formError)}
     {confirmPasswordInput}
     <Divider />
@@ -137,18 +137,18 @@ const registerForm = (formError) => (
   </React.Fragment>
 );
 
-const loginForm = (formError) => (
+const loginForm = (formError, currentUser) => (
   <React.Fragment>
-    {emailInput(formError)}
+    {emailInput(formError, currentUser)}
     {passwordInput(formError)}
     {submitInput(USER_LOGIN)}
   </React.Fragment>
 );
 
-const editForm = (formError) => (
+const editForm = (formError, currentUser) => (
   <React.Fragment>
-    {userNameInput(formError)}
-    {emailInput(formError)}
+    {userNameInput(formError, currentUser)}
+    {emailInput(formError, currentUser)}
     {passwordInput(formError)}
     {submitInput(EDIT_PROFILE)}
   </React.Fragment>
@@ -160,31 +160,33 @@ const ProfileForm = ({
   loginCondition,
   setFormError,
   formError,
+  currentUser,
 }) => {
+  console.log(currentUser);
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  const switchRenderElements = (pathname) => {
+  const switchRenderElements = (pathname, currentUser) => {
     let renderForm = null;
     let renderTitle = "";
     let onFinish = () => {};
     switch (pathname) {
       case "/login":
-        renderForm = loginForm(formError);
+        renderForm = loginForm(formError, currentUser);
         renderTitle = "Sign In";
         onFinish = (values) => {
           fetchUserLogin(values);
         };
         break;
       case "/registration":
-        renderForm = registerForm(formError);
+        renderForm = registerForm(formError, currentUser);
         renderTitle = "Register";
         onFinish = (values) => {
           fetchUserRegistration(values);
         };
         break;
       case "/edit-profile":
-        renderForm = editForm(formError);
+        renderForm = editForm(formError, currentUser);
         renderTitle = "Edit Profile";
     }
     return { renderForm, renderTitle, onFinish };
@@ -192,18 +194,20 @@ const ProfileForm = ({
 
   useEffect(() => {
     if (formError) {
-      message.error(formError);
-      setTimeout(() => setFormError(""), 2000);
+      setTimeout(() => setFormError({}), 5000);
     }
   }, [formError]);
 
   useEffect(() => {
-    if (loginCondition) {
+    if (loginCondition && pathname != "/edit-profile") {
       navigate("/articles");
     }
   }, [loginCondition]);
 
-  const { renderForm, renderTitle, onFinish } = switchRenderElements(pathname);
+  const { renderForm, renderTitle, onFinish } = switchRenderElements(
+    pathname,
+    currentUser
+  );
 
   const { Title } = Typography;
 
@@ -228,13 +232,14 @@ ProfileForm.propTypes = {
   fetchUserLogin: PropTypes.func.isRequired,
   fetchUserRegistration: PropTypes.func.isRequired,
   loginCondition: PropTypes.bool.isRequired,
-  formError: PropTypes.string.isRequired,
+  formError: PropTypes.shape().isRequired,
   setFormError: PropTypes.func.isRequired,
+  currentUser: PropTypes.shape().isRequired,
 };
 
 const mapStateToProps = (state) => {
-  const { loginCondition, formError } = state;
-  return { loginCondition, formError };
+  const { loginCondition, formError, currentUser } = state;
+  return { loginCondition, formError, currentUser };
 };
 
 export default connect(mapStateToProps, {
