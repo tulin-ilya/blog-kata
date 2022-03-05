@@ -1,11 +1,29 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import {connect} from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
+// import { Redirect } from 'react-router-dom';
 
-import { USER_LOGIN, USER_REGISTRATION, EDIT_PROFILE } from './actions';
+import {
+  USER_LOGIN,
+  USER_REGISTRATION,
+  EDIT_PROFILE,
+  fetchUserLogin,
+  fetchUserRegistration,
+  setFormError,
+} from './actions';
 
-import { Card, Form, Input, Checkbox, Button, Divider, Typography } from 'antd';
+import {
+  Card,
+  Form,
+  Input,
+  Checkbox,
+  Button,
+  Divider,
+  Typography,
+  message,
+} from 'antd';
 
 const userNameInput = (
   <Form.Item
@@ -110,7 +128,7 @@ const registerForm = (
 
 const loginForm = (
   <React.Fragment>
-    {userNameInput}
+    {emailInput}
     {passwordInput}
     {submitInput(USER_LOGIN)}
   </React.Fragment>
@@ -125,55 +143,93 @@ const editForm = (
   </React.Fragment>
 );
 
-const ProfileForm = () => {
-  const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+const ProfileForm = ({
+  fetchUserLogin,
+  fetchUserRegistration,
+  loginCondition,
+  setFormError,
+  formError,
+}) => {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const switchRenderElements = (pathname) => {
+    let renderForm = null;
+    let renderTitle = '';
+    let onFinish = () => {};
+    switch (pathname) {
+      case '/login':
+        renderForm = loginForm;
+        renderTitle = 'Sign In';
+        onFinish = (values) => {
+          fetchUserLogin(values);
+        };
+        break;
+      case '/registration':
+        renderForm = registerForm;
+        renderTitle = 'Register';
+        onFinish = (values) => {
+          fetchUserRegistration(values);
+        };
+        break;
+      case '/edit-profile':
+        renderForm = editForm;
+        renderTitle = 'Edit Profile';
+    }
+    return { renderForm, renderTitle, onFinish };
   };
+
+  useEffect(() => {
+    if (formError) {
+      message.error(formError);
+      setTimeout(() => setFormError(''), 500);
+    }
+  }, [formError]);
+
+  useEffect(() => {
+    if (loginCondition) {
+      navigate('/articles');
+    }
+  }, [loginCondition]);
+
+  const { renderForm, renderTitle, onFinish } = switchRenderElements(pathname);
 
   const { Title } = Typography;
 
-  const { pathname } = useLocation();
-
-  const renderElement = (pathname) => {
-    switch (pathname) {
-      case '/login':
-        return loginForm;
-      case '/registration':
-        return registerForm;
-      case '/edit-profile':
-        return editForm;
-    }
-  };
-
-  const renderTitle = (pathname) => {
-    switch (pathname) {
-      case '/login':
-        return 'Sign In';
-      case '/registration':
-        return 'Create new account';
-    }
-  };
-
   return (
-    <Card className="profile-form">
+    <Card
+      className={
+        !formError ? 'profile-form' : 'profile-form profile-form--error'
+      }>
       <Title level={4} style={{ textAlign: 'center' }}>
-        {renderTitle(pathname)}
+        {renderTitle}
       </Title>
       <Form
         name="profile-form"
         layout="vertical"
         initialValues={{ remember: true }}
         onFinish={onFinish}>
-        {renderElement(pathname)}
+        {renderForm}
       </Form>
     </Card>
   );
 };
 
+ProfileForm.propTypes = {
+  fetchUserLogin: PropTypes.func.isRequired,
+  fetchUserRegistration: PropTypes.func.isRequired,
+  loginCondition: PropTypes.bool.isRequired,
+  formError: PropTypes.string.isRequired,
+  setFormError: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) => {
-  return {state};
-}
+  const { loginCondition, formError } = state;
+  return { loginCondition, formError };
+};
 
 export default connect(mapStateToProps, {
-  
+  fetchUserLogin,
+  fetchUserRegistration,
+  setFormError,
 })(ProfileForm);

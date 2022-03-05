@@ -92,6 +92,11 @@ export default class KataBlogService {
       default:
         response = await fetch(url);
     }
+    const result = await response.json();
+
+    if (result.errors) {
+      return result;
+    }
 
     if (!response.ok) {
       throw new Error(
@@ -100,7 +105,8 @@ export default class KataBlogService {
         }`
       );
     }
-    return await response.json();
+
+    return result;
   }
 
   async createUser(username, email, password) {

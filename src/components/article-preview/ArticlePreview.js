@@ -59,7 +59,11 @@ const ArtilcePreview = ({ article, isPreview }) => {
             <List
               itemLayout="horizontal"
               dataSource={tagList}
-              renderItem={(tag) => <Tag>{tag}</Tag>}></List>
+              renderItem={(tag) => (
+                <Tooltip title={tag}>
+                  <Tag>{tag.length < 10 ? tag : `${tag.slice(0, 9)}...`}</Tag>
+                </Tooltip>
+              )}></List>
           ) : null}
           <Tooltip title={description} placement="bottom">
             <Paragraph
