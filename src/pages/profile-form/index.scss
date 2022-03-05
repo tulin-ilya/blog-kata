@@ -2,10 +2,5 @@
   margin: 1rem 0;
   width: 380px;
   filter: drop-shadow(0 0.1rem 0.5rem #aeadad);
-  transition: filter 0.2s;
-
-  &--error {
-    filter: drop-shadow(0 0.1rem 0.5rem #d60000);
-    transition: filter 0.2s;
-  }
+  // transition: filter 0.2s;
 }
