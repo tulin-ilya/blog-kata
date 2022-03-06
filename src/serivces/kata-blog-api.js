@@ -142,7 +142,8 @@ export default class KataBlogService {
     email = null,
     username = null,
     bio = null,
-    image = null
+    image = null,
+    password
   ) {
     const initialValues = await this.getCurrentUser();
     const { initEmail, initUsername, initBio, initImage } = initialValues.user;
@@ -154,6 +155,7 @@ export default class KataBlogService {
           username: username || initUsername,
           bio: bio || initBio,
           image: image || initImage,
+          password,
         },
       },
     };

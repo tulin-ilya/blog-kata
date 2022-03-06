@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -26,20 +28,19 @@ const ProfileForm = ({
       case '/login':
         renderStack.renderForm = loginForm(formError, pathname);
         renderStack.renderTitle = 'Sign In';
-        renderStack.onFinish = (values) => {
-          fetchUserLogin(values);
-        };
+        renderStack.onFinish = (values) => fetchUserLogin(values);
         break;
       case '/registration':
         renderStack.renderForm = registerForm(formError, pathname);
         renderStack.renderTitle = 'Create new account';
-        renderStack.onFinish = (values) => {
-          fetchUserRegistration(values);
-        };
+        renderStack.onFinish = (values) => fetchUserRegistration(values);
         break;
       case '/edit-profile':
         renderStack.renderForm = editForm(formError, pathname);
         renderStack.renderTitle = 'Edit Profile';
+        renderStack.onFinish = (values) => {
+          console.log(values);
+        };
     }
     return renderStack;
   })(pathname);
@@ -80,15 +81,6 @@ const ProfileForm = ({
       </Form>
     </Card>
   );
-};
-
-ProfileForm.propTypes = {
-  fetchUserLogin: PropTypes.func.isRequired,
-  fetchUserRegistration: PropTypes.func.isRequired,
-  loginCondition: PropTypes.bool.isRequired,
-  formError: PropTypes.shape().isRequired,
-  setFormError: PropTypes.func.isRequired,
-  currentUser: PropTypes.shape().isRequired,
 };
 
 const mapStateToProps = (state) => {
