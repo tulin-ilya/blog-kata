@@ -58,15 +58,19 @@ export default class KataBlogService {
     return url;
   }
 
-  async getResponse(queryPath, queryOptions) {
+  async getResponse(queryPath, queryOptions, token) {
     const url = this.setQueryUrl(queryPath, queryOptions);
-    const headers = { 'Content-type': 'application/json' };
+    console.log(token);
+    const headers = {
+      'Content-type': 'application/json',
+      Authorization: `Basic ${token}`,
+    };
     let body;
     let response;
 
     switch (queryOptions.requestType) {
       case GET:
-        response = await fetch(url);
+        response = await fetch(url, { method: GET, headers });
         break;
       case POST:
         body = JSON.stringify(queryOptions.requestBody);
@@ -141,25 +145,33 @@ export default class KataBlogService {
   async updCurrentUser(
     email = null,
     username = null,
-    bio = null,
     image = null,
-    password
+    password,
+    token
   ) {
+    console.log(`updUser ${token}`);
     const initialValues = await this.getCurrentUser();
-    const { initEmail, initUsername, initBio, initImage } = initialValues.user;
+    const {
+      email: initEmail,
+      username: initUsername,
+      image: initImage,
+    } = initialValues.user;
     const queryOptions = {
       requestType: PUT,
       requestBody: {
         user: {
           email: email || initEmail,
           username: username || initUsername,
-          bio: bio || initBio,
           image: image || initImage,
           password,
         },
       },
     };
-    const response = await this.getResponse(UPD_CURRENT_USER, queryOptions);
+    const response = await this.getResponse(
+      UPD_CURRENT_USER,
+      queryOptions,
+      token
+    );
     return await response;
   }
 
@@ -179,16 +191,26 @@ export default class KataBlogService {
     return await response;
   }
 
-  async createNewArticle(title, descripton, body, tagList) {
+  async createNewArticle(title, descripton, body, tagList, token) {
     const queryOptions = {
       requestType: POST,
       requestBody: { article: { title, descripton, body, tagList } },
     };
-    const response = await this.getResponse(CREATE_NEW_ARTICLE, queryOptions);
+    const response = await this.getResponse(
+      CREATE_NEW_ARTICLE,
+      queryOptions,
+      token
+    );
     return await response;
   }
 
-  async updArticle(articleSlug, title = null, description = null, body = null) {
+  async updArticle(
+    articleSlug,
+    title = null,
+    description = null,
+    body = null,
+    token
+  ) {
     const initialllValue = await this.getArticle(articleSlug);
     const { initTitle, initDescription, initBody } = initialllValue.article;
     const queryOptions = {
@@ -201,7 +223,7 @@ export default class KataBlogService {
         },
       },
     };
-    const responce = await this.getResponse(UPD_ARTICLE, queryOptions);
+    const responce = await this.getResponse(UPD_ARTICLE, queryOptions, token);
     return await responce;
   }
 
@@ -210,56 +232,29 @@ export default class KataBlogService {
     return await responce;
   }
 
-  async favoriteArticle(articleSlug) {
+  async favoriteArticle(articleSlug, token) {
     const queryOptions = {
       requestType: POST,
       articleSlug,
     };
-    const responce = await this.getResponse(FAVORITE_AN_ARTICLE, queryOptions);
+    const responce = await this.getResponse(
+      FAVORITE_AN_ARTICLE,
+      queryOptions,
+      token
+    );
     return await responce;
   }
 
-  async unfavoriteArticle(articleSlug) {
+  async unfavoriteArticle(articleSlug, token) {
     const queryOptions = {
       requestType: DELETE,
       articleSlug,
     };
     const responce = await this.getResponse(
       UNFAVORITE_AN_ARTICLE,
-      queryOptions
+      queryOptions,
+      token
     );
     return await responce;
   }
 }
-
-const options = {
-  requestType: 'string',
-  articleSlug: 'string',
-  requestBody: {
-    user: {
-      username: 'string',
-      email: 'string',
-      password: 'string',
-      token: 'string',
-      bio: 'string',
-      image: 'string',
-    },
-    article: {
-      slug: 'string',
-      title: 'string',
-      description: 'string',
-      body: 'string',
-      tagList: ['string'],
-      createdAt: 'string',
-      updatedAt: 'string',
-      favorited: 'bool',
-      favoritesCount: 'number',
-      author: {
-        username: 'string',
-        bio: 'string',
-        image: 'string',
-        following: 'bool',
-      },
-    },
-  },
-};

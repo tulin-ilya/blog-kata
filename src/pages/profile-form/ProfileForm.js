@@ -1,11 +1,15 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { fetchUserLogin, fetchUserRegistration, setFormError } from './actions';
+import {
+  fetchUserLogin,
+  fetchUserRegistration,
+  fetchEditProfile,
+  setFormError,
+} from './actions';
 
 import { Card, Form, Typography } from 'antd';
 
@@ -14,6 +18,7 @@ import { registerForm, loginForm, editForm } from './forms';
 const ProfileForm = ({
   fetchUserLogin,
   fetchUserRegistration,
+  fetchEditProfile,
   loginCondition,
   setFormError,
   formError,
@@ -22,7 +27,7 @@ const ProfileForm = ({
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  const { renderForm, renderTitle, onFinish } = ((pathname) => {
+  const { renderForm, renderTitle, onFinish } = ((pathname, currentUser) => {
     const renderStack = {};
     switch (pathname) {
       case '/login':
@@ -39,11 +44,11 @@ const ProfileForm = ({
         renderStack.renderForm = editForm(formError, pathname);
         renderStack.renderTitle = 'Edit Profile';
         renderStack.onFinish = (values) => {
-          console.log(values);
+          fetchEditProfile(values, currentUser.token);
         };
     }
     return renderStack;
-  })(pathname);
+  })(pathname, currentUser);
 
   useEffect(() => {
     if (Object.keys(formError).length) {
@@ -83,6 +88,16 @@ const ProfileForm = ({
   );
 };
 
+ProfileForm.propTypes = {
+  fetchUserLogin: PropTypes.func.isRequired,
+  fetchUserRegistration: PropTypes.func.isRequired,
+  fetchEditProfile: PropTypes.func.isRequired,
+  loginCondition: PropTypes.bool.isRequired,
+  setFormError: PropTypes.func.isRequired,
+  formError: PropTypes.shape().isRequired,
+  currentUser: PropTypes.shape().isRequired,
+};
+
 const mapStateToProps = (state) => {
   const { loginCondition, formError, currentUser } = state;
   return { loginCondition, formError, currentUser };
@@ -91,5 +106,6 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   fetchUserLogin,
   fetchUserRegistration,
+  fetchEditProfile,
   setFormError,
 })(ProfileForm);

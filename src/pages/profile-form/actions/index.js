@@ -50,14 +50,14 @@ export const fetchUserLogin =
   };
 
 export const fetchEditProfile =
-  ({ username, email, password, image }) =>
+  ({ username, email, password, image }, token) =>
   async (dispatch) => {
     const data = await kataBlogService.updCurrentUser(
       email,
       username,
-      null,
       image,
-      password
+      password,
+      token
     );
     if (data.errors) {
       console.log(data.errors);

@@ -31,16 +31,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
-
-// import KataBlogService from './serivces/kata-blog-api';
-
-// const kataBlogService = new KataBlogService();
-
-// const articles = kataBlogService.getArticles();
-// const article = kataBlogService.getArticle('pro-kusty-q3ks2l');
-// const user = kataBlogService.createUser('Ilya', 'ilya@tulin.ru', '123');
-// const login = kataBlogService.login('ilya@tulin.ru', '123');
-// const favorite = kataBlogService.favoriteArticle('dsfa-jcrzns');
-
-// console.log(article);
-// console.log(login);
