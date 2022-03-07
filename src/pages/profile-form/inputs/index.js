@@ -12,7 +12,11 @@ export const userNameInput = (formError) => {
       required={false}
       validateStatus={formError.username ? 'error' : ''}
       help={formError.username || ''}
-      rules={[{ required: true, message: 'Please input your Username!' }]}>
+      rules={[
+        { required: true, message: 'Please input your Username!' },
+        { max: 20, message: 'Username length must be to 20' },
+        { min: 3, message: 'Username length must be from 3' },
+      ]}>
       <Input placeholder="Username" />
     </Form.Item>
   );
@@ -29,11 +33,11 @@ export const passwordInput = (formError, pathname) => {
         formError.password || formError['email or password'] ? 'error' : ''
       }
       help={formError.password}
-      rules={
-        editCondition
-          ? []
-          : [{ required: true, message: 'Please input your password!' }]
-      }
+      rules={[
+        { required: !editCondition, message: 'Please input your password!' },
+        { max: 40, message: 'Password length must be to 40' },
+        { min: 6, message: 'Password length must be from 6' },
+      ]}
       hasFeedback>
       <Input.Password placeholder="Password" />
     </Form.Item>
