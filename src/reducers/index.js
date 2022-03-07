@@ -7,7 +7,6 @@ import articlesListPage from './articlesListPage';
 import currentArticle from './currentArticle';
 import loadingCondition from './loadingCondition';
 import loginCondition from './loginCondition';
-import currentUser from './currentUser';
 import formError from './formError';
 
 export default combineReducers({
@@ -18,6 +17,5 @@ export default combineReducers({
   currentArticle,
   loadingCondition,
   loginCondition,
-  currentUser,
   formError,
 });

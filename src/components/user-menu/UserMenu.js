@@ -1,33 +1,33 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import {
-  setLoginCondition,
-  setCurrentUser,
-} from '../../pages/profile-form/actions';
+import { setLoginCondition } from '../../pages/profile-form/actions';
 
 import { Button, Menu, Dropdown, Avatar, Typography, Space } from 'antd';
 import { UserOutlined, EditOutlined, LogoutOutlined } from '@ant-design/icons';
 
-const UserMenu = ({
-  loginCondition,
-  setLoginCondition,
-  setCurrentUser,
-  currentUser,
-}) => {
+const UserMenu = ({ setLoginCondition, loginCondition }) => {
   const { Text } = Typography;
 
-  const { username } = currentUser;
+  const { username, image } =
+    JSON.parse(localStorage.getItem('currentUser')) || {};
 
   const logout = (key) => {
     if (key.key === 'out') {
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('token');
       setLoginCondition(false);
-      setCurrentUser({});
     }
   };
+
+  useEffect(() => {
+    if (username && !loginCondition) {
+      setLoginCondition(true);
+    }
+  });
 
   const profileMenuItems = (
     <Menu onClick={logout}>
@@ -52,6 +52,7 @@ const UserMenu = ({
           <Text>{username}</Text>
           <Avatar
             style={{ backgroundColor: '#87d068' }}
+            src={image}
             icon={<UserOutlined />}
             size={46}
           />
@@ -76,17 +77,14 @@ const UserMenu = ({
 
 UserMenu.propTypes = {
   loginCondition: PropTypes.bool.isRequired,
-  setCurrentUser: PropTypes.func.isRequired,
   setLoginCondition: PropTypes.func.isRequired,
-  currentUser: PropTypes.shape().isRequired,
 };
 
 const mapStateToProps = (state) => {
-  const { loginCondition, currentUser } = state;
-  return { loginCondition, currentUser };
+  const { loginCondition } = state;
+  return { loginCondition };
 };
 
 export default connect(mapStateToProps, {
   setLoginCondition,
-  setCurrentUser,
 })(UserMenu);

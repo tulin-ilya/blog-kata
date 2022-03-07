@@ -22,12 +22,13 @@ const ProfileForm = ({
   loginCondition,
   setFormError,
   formError,
-  currentUser,
 }) => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { username, email, image } =
+    JSON.parse(localStorage.getItem('currentUser')) || {};
 
-  const { renderForm, renderTitle, onFinish } = ((pathname, currentUser) => {
+  const { renderForm, renderTitle, onFinish } = ((pathname) => {
     const renderStack = {};
     switch (pathname) {
       case '/login':
@@ -44,11 +45,12 @@ const ProfileForm = ({
         renderStack.renderForm = editForm(formError, pathname);
         renderStack.renderTitle = 'Edit Profile';
         renderStack.onFinish = (values) => {
-          fetchEditProfile(values, currentUser.token);
+          fetchEditProfile(values);
+          navigate('/articles');
         };
     }
     return renderStack;
-  })(pathname, currentUser);
+  })(pathname);
 
   useEffect(() => {
     if (Object.keys(formError).length) {
@@ -78,9 +80,9 @@ const ProfileForm = ({
         initialValues={{ remember: true }}
         onFinish={onFinish}
         fields={[
-          { name: ['username'], value: currentUser.username },
-          { name: ['email'], value: currentUser.email },
-          { name: ['image'], value: currentUser.image },
+          { name: ['username'], value: username },
+          { name: ['email'], value: email },
+          { name: ['image'], value: image },
         ]}>
         {renderForm}
       </Form>
@@ -95,12 +97,11 @@ ProfileForm.propTypes = {
   loginCondition: PropTypes.bool.isRequired,
   setFormError: PropTypes.func.isRequired,
   formError: PropTypes.shape().isRequired,
-  currentUser: PropTypes.shape().isRequired,
 };
 
 const mapStateToProps = (state) => {
-  const { loginCondition, formError, currentUser } = state;
-  return { loginCondition, formError, currentUser };
+  const { loginCondition, formError } = state;
+  return { loginCondition, formError };
 };
 
 export default connect(mapStateToProps, {

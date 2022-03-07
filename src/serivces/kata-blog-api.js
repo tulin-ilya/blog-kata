@@ -20,6 +20,7 @@ const DELETE = 'DELETE';
 
 export default class KataBlogService {
   _apiBase = 'https://kata.academy:8021/api';
+  _token = localStorage.getItem('token');
 
   setQueryUrl(queryPath, queryOptions) {
     const { articleSlug, offset } = queryOptions;
@@ -58,12 +59,11 @@ export default class KataBlogService {
     return url;
   }
 
-  async getResponse(queryPath, queryOptions, token) {
+  async getResponse(queryPath, queryOptions) {
     const url = this.setQueryUrl(queryPath, queryOptions);
-    console.log(token);
     const headers = {
       'Content-type': 'application/json',
-      Authorization: `Basic ${token}`,
+      Authorization: `Bearer ${this._token}`,
     };
     let body;
     let response;
@@ -91,10 +91,9 @@ export default class KataBlogService {
       case DELETE:
         response = await fetch(url, {
           method: DELETE,
+          headers,
         });
         break;
-      default:
-        response = await fetch(url);
     }
     const result = await response.json();
 
@@ -113,6 +112,11 @@ export default class KataBlogService {
     return result;
   }
 
+  _setCurrentUserToLS(currentUser) {
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    localStorage.setItem('token', currentUser.token);
+  }
+
   async createUser(username, email, password) {
     const queryOptions = {
       requestType: POST,
@@ -121,6 +125,7 @@ export default class KataBlogService {
       },
     };
     const response = await this.getResponse(CREATE_USER, queryOptions);
+    this._setCurrentUserToLS(response.user);
     return await response;
   }
 
@@ -132,6 +137,9 @@ export default class KataBlogService {
       },
     };
     const response = await this.getResponse(LOGIN, queryOptions);
+    if (response.user) {
+      this._setCurrentUserToLS(response.user);
+    }
     return await response;
   }
 
@@ -142,14 +150,7 @@ export default class KataBlogService {
     return await response;
   }
 
-  async updCurrentUser(
-    email = null,
-    username = null,
-    image = null,
-    password,
-    token
-  ) {
-    console.log(`updUser ${token}`);
+  async updCurrentUser(email = null, username = null, image = null, password) {
     const initialValues = await this.getCurrentUser();
     const {
       email: initEmail,
@@ -167,11 +168,10 @@ export default class KataBlogService {
         },
       },
     };
-    const response = await this.getResponse(
-      UPD_CURRENT_USER,
-      queryOptions,
-      token
-    );
+    const response = await this.getResponse(UPD_CURRENT_USER, queryOptions);
+    if (response.user) {
+      this._setCurrentUserToLS(response.user);
+    }
     return await response;
   }
 
@@ -191,26 +191,16 @@ export default class KataBlogService {
     return await response;
   }
 
-  async createNewArticle(title, descripton, body, tagList, token) {
+  async createNewArticle(title, descripton, body, tagList) {
     const queryOptions = {
       requestType: POST,
       requestBody: { article: { title, descripton, body, tagList } },
     };
-    const response = await this.getResponse(
-      CREATE_NEW_ARTICLE,
-      queryOptions,
-      token
-    );
+    const response = await this.getResponse(CREATE_NEW_ARTICLE, queryOptions);
     return await response;
   }
 
-  async updArticle(
-    articleSlug,
-    title = null,
-    description = null,
-    body = null,
-    token
-  ) {
+  async updArticle(articleSlug, title = null, description = null, body = null) {
     const initialllValue = await this.getArticle(articleSlug);
     const { initTitle, initDescription, initBody } = initialllValue.article;
     const queryOptions = {
@@ -223,7 +213,7 @@ export default class KataBlogService {
         },
       },
     };
-    const responce = await this.getResponse(UPD_ARTICLE, queryOptions, token);
+    const responce = await this.getResponse(UPD_ARTICLE, queryOptions);
     return await responce;
   }
 
@@ -232,28 +222,23 @@ export default class KataBlogService {
     return await responce;
   }
 
-  async favoriteArticle(articleSlug, token) {
+  async favoriteArticle(articleSlug) {
     const queryOptions = {
       requestType: POST,
       articleSlug,
     };
-    const responce = await this.getResponse(
-      FAVORITE_AN_ARTICLE,
-      queryOptions,
-      token
-    );
+    const responce = await this.getResponse(FAVORITE_AN_ARTICLE, queryOptions);
     return await responce;
   }
 
-  async unfavoriteArticle(articleSlug, token) {
+  async unfavoriteArticle(articleSlug) {
     const queryOptions = {
       requestType: DELETE,
       articleSlug,
     };
     const responce = await this.getResponse(
       UNFAVORITE_AN_ARTICLE,
-      queryOptions,
-      token
+      queryOptions
     );
     return await responce;
   }

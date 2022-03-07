@@ -16,11 +16,6 @@ export const setFormError = (formError) => ({
   formError,
 });
 
-export const setCurrentUser = (currentUser) => ({
-  type: SET_CURRENT_USER,
-  currentUser,
-});
-
 export const fetchUserRegistration =
   ({ username, email, password }) =>
   async (dispatch) => {
@@ -31,7 +26,6 @@ export const fetchUserRegistration =
     } else {
       dispatch(setFormError({}));
       dispatch(setLoginCondition(true));
-      dispatch(setCurrentUser(data.user));
     }
   };
 
@@ -45,7 +39,6 @@ export const fetchUserLogin =
     } else {
       dispatch(setFormError({}));
       dispatch(setLoginCondition(true));
-      dispatch(setCurrentUser(data.user));
     }
   };
 
@@ -63,6 +56,6 @@ export const fetchEditProfile =
       console.log(data.errors);
       dispatch(setFormError(data.errors));
     } else {
-      dispatch(setCurrentUser(data.user));
+      // dispatch(setCurrentUser(data.user));
     }
   };
