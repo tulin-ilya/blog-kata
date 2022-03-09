@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import ArticleForm from '../../pages/aricle-form/ArticleForm';
 
 import ArticlesList from '../../pages/articles-list/ArticlesList';
 import ProfileForm from '../../pages/profile-form';
@@ -14,6 +15,7 @@ const AppContent = () => {
       <Route path="/registration" element={<ProfileForm />} />
       <Route path="/login" element={<ProfileForm />} />
       <Route path="/edit-profile" element={<ProfileForm />} />
+      <Route path="/new-article" element={<ArticleForm />} />
     </Routes>
   );
 };

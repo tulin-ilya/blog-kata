@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import React from 'react';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Link, useLocation } from 'react-router-dom';
 
 import {
   Col,
@@ -13,6 +13,7 @@ import {
   Typography,
   Avatar,
   Tooltip,
+  Button,
 } from 'antd';
 import { HeartFilled } from '@ant-design/icons';
 
@@ -25,9 +26,13 @@ const ArtilcePreview = ({ article, isPreview }) => {
     author,
     createdAt,
     description,
-    favorited,
   } = article;
   const { username, image } = author;
+
+  const { pathname } = useLocation();
+  const { username: currentUserName } = JSON.parse(
+    localStorage.getItem('currentUser')
+  );
 
   const { Text, Paragraph, Title } = Typography;
   return (
@@ -74,23 +79,36 @@ const ArtilcePreview = ({ article, isPreview }) => {
             </Paragraph>
           </Tooltip>
         </Space>
-        <Space align="middle">
-          <Col
-            style={{
-              display: 'flex',
-              alignItems: 'end',
-              flexDirection: 'column',
-            }}>
-            <Text strong>{username}</Text>
-            <Text type="secondary">{createdAt}</Text>
-          </Col>
-          <Col>
-            <Avatar size={46} src={image} />
-          </Col>
+        <Space direction="vertical">
+          <Space align="middle">
+            <Col
+              style={{
+                display: 'flex',
+                alignItems: 'end',
+                flexDirection: 'column',
+              }}>
+              <Text strong>{username}</Text>
+              <Text type="secondary">{createdAt}</Text>
+            </Col>
+            <Col>
+              <Avatar size={46} src={image} />
+            </Col>
+          </Space>
+          {pathname === `/articles/${slug}` && currentUserName === username ? (
+            <Space>
+              <Button className="sign-in-button">Edit</Button>
+              <Button className="sign-in-button">Delete</Button>
+            </Space>
+          ) : null}
         </Space>
       </Row>
     </React.Fragment>
   );
+};
+
+ArtilcePreview.propTypes = {
+  article: PropTypes.shape().isRequired,
+  isPreview: PropTypes.bool.isRequired,
 };
 
 export default ArtilcePreview;

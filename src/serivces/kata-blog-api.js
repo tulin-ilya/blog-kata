@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 const CREATE_USER = 'CREATE_USER';
 const LOGIN = 'LOGIN';
 const GET_CURRENT_USER = 'GET_CURRENT_USER';

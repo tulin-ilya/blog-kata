@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -44,9 +43,12 @@ const UserMenu = ({ setLoginCondition, loginCondition }) => {
 
   const userMenu = loginCondition ? (
     <React.Fragment>
-      <Button size="small" className="create-article-button">
-        Create article
-      </Button>
+      <Link to="/new-article">
+        <Button size="small" className="create-article-button">
+          Create article
+        </Button>
+      </Link>
+
       <Dropdown overlay={profileMenuItems} className="avatar">
         <Space>
           <Text>{username}</Text>
