@@ -34,7 +34,6 @@ export const fetchUserLogin =
   async (dispatch) => {
     const data = await kataBlogService.login(email, password);
     if (data.errors) {
-      console.log(data.errors);
       dispatch(setFormError(data.errors));
     } else {
       dispatch(setFormError({}));
@@ -53,9 +52,6 @@ export const fetchEditProfile =
       token
     );
     if (data.errors) {
-      console.log(data.errors);
       dispatch(setFormError(data.errors));
-    } else {
-      // dispatch(setCurrentUser(data.user));
     }
   };

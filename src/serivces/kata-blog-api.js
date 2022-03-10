@@ -184,10 +184,10 @@ export default class KataBlogService {
     return await response;
   }
 
-  async createNewArticle(title, descripton, body, tagList) {
+  async createNewArticle(title, description, body, tagList) {
     const queryOptions = {
       requestType: POST,
-      requestBody: { article: { title, descripton, body, tagList } },
+      requestBody: { article: { title, description, body, tagList } },
     };
     const response = await this.getResponse(CREATE_NEW_ARTICLE, queryOptions);
     return await response;

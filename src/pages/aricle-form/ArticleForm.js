@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Card, Form, Typography } from 'antd';
+
+import { fetchNewArticle, fetchEditArticle } from './actions';
 
 import {
   titleInput,
@@ -11,16 +13,16 @@ import {
   bodyInput,
   submitInput,
   tagListInput,
-  tagField,
 } from './inputs';
 
 const tagList = ['tag1', 'tag2'];
 
-const ArticleForm = ({ loginCondition }) => {
+const ArticleForm = ({ loginCondition, fetchNewArticle, fetchEditArticle }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const onFinish = (values) => {
-    console.log(values);
+    fetchNewArticle(values);
   };
 
   useEffect(() => {
@@ -54,6 +56,8 @@ const ArticleForm = ({ loginCondition }) => {
 
 ArticleForm.propTypes = {
   loginCondition: PropTypes.bool.isRequired,
+  fetchNewArticle: PropTypes.func.isRequired,
+  fetchEditArticle: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -61,4 +65,6 @@ const mapStateToProps = (state) => {
   return { loginCondition };
 };
 
-export default connect(mapStateToProps)(ArticleForm);
+export default connect(mapStateToProps, { fetchNewArticle, fetchEditArticle })(
+  ArticleForm
+);

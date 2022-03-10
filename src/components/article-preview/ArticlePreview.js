@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -17,7 +18,7 @@ import {
 } from 'antd';
 import { HeartFilled } from '@ant-design/icons';
 
-const ArtilcePreview = ({ article, isPreview }) => {
+const ArtilcePreview = ({ article, isPreview, loginCondition }) => {
   const {
     slug,
     title,
@@ -30,12 +31,11 @@ const ArtilcePreview = ({ article, isPreview }) => {
   const { username, image } = author;
 
   const { pathname } = useLocation();
-
-  let currentUser;
+  const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
-    if (localStorage.getItem('currentUser')) {
-      currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (loginCondition) {
+      setCurrentUser(JSON.parse(localStorage.getItem('currentUser')));
     }
   });
 
@@ -115,6 +115,12 @@ const ArtilcePreview = ({ article, isPreview }) => {
 ArtilcePreview.propTypes = {
   article: PropTypes.shape().isRequired,
   isPreview: PropTypes.bool.isRequired,
+  loginCondition: PropTypes.bool.isRequired,
 };
 
-export default ArtilcePreview;
+const mapStateToProps = (state) => {
+  const { loginCondition } = state;
+  return { loginCondition };
+};
+
+export default connect(mapStateToProps)(ArtilcePreview);
