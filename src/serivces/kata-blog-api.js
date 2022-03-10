@@ -150,19 +150,13 @@ export default class KataBlogService {
   }
 
   async updCurrentUser(email = null, username = null, image = null, password) {
-    const initialValues = await this.getCurrentUser();
-    const {
-      email: initEmail,
-      username: initUsername,
-      image: initImage,
-    } = initialValues.user;
     const queryOptions = {
       requestType: PUT,
       requestBody: {
         user: {
-          email: email || initEmail,
-          username: username || initUsername,
-          image: image || initImage,
+          email,
+          username,
+          image,
           password,
         },
       },

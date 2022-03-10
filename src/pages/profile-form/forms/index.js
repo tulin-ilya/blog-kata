@@ -21,7 +21,7 @@ export const registerForm = (formError, pathname) => {
       {userNameInput(formError)}
       {emailInput(formError)}
       {passwordInput(formError, pathname)}
-      {confirmPasswordInput}
+      {confirmPasswordInput()}
       <Divider />
       {agreeInput}
       {submitInput(USER_REGISTRATION)}
@@ -55,7 +55,7 @@ export const editForm = (formError, pathname) => {
       {userNameInput(formError)}
       {emailInput(formError)}
       {passwordInput(formError, pathname)}
-      {imageURL}
+      {imageURL()}
       {submitInput(EDIT_PROFILE)}
     </React.Fragment>
   );

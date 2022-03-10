@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -30,9 +30,14 @@ const ArtilcePreview = ({ article, isPreview }) => {
   const { username, image } = author;
 
   const { pathname } = useLocation();
-  const { username: currentUserName } = JSON.parse(
-    localStorage.getItem('currentUser')
-  );
+
+  let currentUser;
+
+  useEffect(() => {
+    if (localStorage.getItem('currentUser')) {
+      currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    }
+  });
 
   const { Text, Paragraph, Title } = Typography;
   return (
@@ -94,7 +99,8 @@ const ArtilcePreview = ({ article, isPreview }) => {
               <Avatar size={46} src={image} />
             </Col>
           </Space>
-          {pathname === `/articles/${slug}` && currentUserName === username ? (
+          {pathname === `/articles/${slug}` &&
+          currentUser.username === username ? (
             <Space>
               <Button className="sign-in-button">Edit</Button>
               <Button className="sign-in-button">Delete</Button>

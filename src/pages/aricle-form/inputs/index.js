@@ -46,7 +46,6 @@ export const tagListInput = (
   <Form.Item label="Tags" rules={[{ required: true, message: 'Missing tag' }]}>
     <Form.List name="tagList">
       {(fields, operation, meta) => {
-        // console.log(operation);
         return tagField(fields, operation, meta);
       }}
     </Form.List>
