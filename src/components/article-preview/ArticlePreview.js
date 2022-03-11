@@ -43,13 +43,13 @@ const ArtilcePreview = ({
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState({});
-  const [favoritesCountState, setFavoritesCountState] =
-    useState(favoritesCount);
+  const [favoritesCountState, setFavoritesCountState] = useState(0);
 
   useEffect(() => {
     if (loginCondition) {
       setCurrentUser(JSON.parse(localStorage.getItem('currentUser')));
     }
+    setFavoritesCountState(favoritesCount);
   }, []);
 
   const { Text, Paragraph, Title } = Typography;
@@ -74,7 +74,6 @@ const ArtilcePreview = ({
                 character={<HeartFilled />}
                 defaultValue={favorited}
                 onChange={(value) => {
-                  console.log(value);
                   fetchFavoriteArticle(value, slug);
                   setFavoritesCountState(favoritesCount + value);
                 }}
