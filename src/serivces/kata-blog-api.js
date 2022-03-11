@@ -7,6 +7,7 @@ const GET_ARTICLES = 'GET_ARTICLES';
 const GET_ARTICLE = 'GET_ARTICLE';
 const CREATE_NEW_ARTICLE = 'CREATE_NEW_ARTICLE';
 const UPD_ARTICLE = 'UPD_ARTICLE';
+const DELETE_ARTICLE = 'DELETE_ARTICLE';
 const GET_TAGS = 'GET_TAGS';
 
 const FAVORITE_AN_ARTICLE = 'FAVORITE_AN_ARTICLE';
@@ -43,6 +44,7 @@ export default class KataBlogService {
         break;
       case GET_ARTICLE:
       case UPD_ARTICLE:
+      case DELETE_ARTICLE:
         url = `${this._apiBase}/articles/${articleSlug}`;
         break;
       case GET_TAGS:
@@ -62,6 +64,7 @@ export default class KataBlogService {
     const url = this.setQueryUrl(queryPath, queryOptions);
     const headers = {
       'Content-type': 'application/json',
+      accept: 'application/json',
       Authorization: `Bearer ${this._token}`,
     };
     let body;
@@ -207,6 +210,14 @@ export default class KataBlogService {
     };
     const responce = await this.getResponse(UPD_ARTICLE, queryOptions);
     return await responce;
+  }
+
+  async deleteArticle(articleSlug) {
+    const response = await this.getResponse(DELETE_ARTICLE, {
+      requestType: DELETE,
+      articleSlug,
+    });
+    return await response;
   }
 
   async getTags() {

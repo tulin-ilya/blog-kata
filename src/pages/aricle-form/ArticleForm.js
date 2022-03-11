@@ -27,14 +27,18 @@ const ArticleForm = ({
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const onFinish = (values) => {
-    return pathname.includes('edit')
-      ? fetchNewArticle(values)
-      : fetchEditArticle(currentArticle.slug, values);
+    if (!pathname.includes('edit')) {
+      fetchNewArticle(values);
+      navigate('/articles');
+    } else {
+      fetchEditArticle(currentArticle.slug, values);
+      navigate(`/articles/${currentArticle.slug}`);
+    }
   };
 
   useEffect(() => {
     if (!loginCondition) {
-      navigate('/articles');
+      navigate('/login');
     }
   });
 
@@ -43,7 +47,7 @@ const ArticleForm = ({
   return (
     <Card className="article-form">
       <Title level={4} style={{ textAlign: 'center' }}>
-        Create new article
+        {!pathname.includes('edit') ? 'Create new article' : 'Edit article'}
       </Title>
       <Form
         name="article-form"

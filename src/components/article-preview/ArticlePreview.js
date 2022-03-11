@@ -2,7 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+
+import { fetchDeleteArticle } from './actions';
 
 import {
   Col,
@@ -15,10 +17,16 @@ import {
   Avatar,
   Tooltip,
   Button,
+  Popconfirm,
 } from 'antd';
 import { HeartFilled } from '@ant-design/icons';
 
-const ArtilcePreview = ({ article, isPreview, loginCondition }) => {
+const ArtilcePreview = ({
+  article,
+  isPreview,
+  loginCondition,
+  fetchDeleteArticle,
+}) => {
   const {
     slug,
     title,
@@ -31,6 +39,7 @@ const ArtilcePreview = ({ article, isPreview, loginCondition }) => {
   const { username, image } = author;
 
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
@@ -101,11 +110,20 @@ const ArtilcePreview = ({ article, isPreview, loginCondition }) => {
           </Space>
           {pathname === `/articles/${slug}` &&
           currentUser.username === username ? (
-            <Space>
+            <Space style={{ display: 'flex', justifyContent: 'end' }}>
               <Link to={`/articles/${slug}/edit`}>
-                <Button className="sign-in-button">Edit</Button>
+                <Button>Edit</Button>
               </Link>
-              <Button className="sign-in-button">Delete</Button>
+              <Popconfirm
+                title="Are you sure to delete this article?"
+                onConfirm={() => {
+                  fetchDeleteArticle(slug);
+                  navigate('/articles');
+                }}
+                okText="Yes"
+                cancelText="No">
+                <Button>Delete</Button>
+              </Popconfirm>
             </Space>
           ) : null}
         </Space>
@@ -118,6 +136,7 @@ ArtilcePreview.propTypes = {
   article: PropTypes.shape().isRequired,
   isPreview: PropTypes.bool.isRequired,
   loginCondition: PropTypes.bool.isRequired,
+  fetchDeleteArticle: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -125,4 +144,4 @@ const mapStateToProps = (state) => {
   return { loginCondition };
 };
 
-export default connect(mapStateToProps)(ArtilcePreview);
+export default connect(mapStateToProps, { fetchDeleteArticle })(ArtilcePreview);
