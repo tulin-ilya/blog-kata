@@ -16,6 +16,7 @@ const AppContent = () => {
       <Route path="/login" element={<ProfileForm />} />
       <Route path="/edit-profile" element={<ProfileForm />} />
       <Route path="/new-article" element={<ArticleForm />} />
+      <Route path="articles/:articleSlug/edit" element={<ArticleForm />} />
     </Routes>
   );
 };

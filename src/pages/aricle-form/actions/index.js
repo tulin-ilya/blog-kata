@@ -4,9 +4,10 @@ import { setFormError } from '../../profile-form/actions';
 
 const kataBlogService = new KataBlogService();
 
-export const fetchEditArticle = (article) => async (dispatch) => {
+export const fetchEditArticle = (slug, article) => async (dispatch) => {
   const { title, body, description, tagList } = article;
   const data = await kataBlogService.updArticle(
+    slug,
     title,
     description,
     body,

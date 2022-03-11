@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Card, Form, Typography } from 'antd';
 
 import { fetchNewArticle, fetchEditArticle } from './actions';
+import { fetchCurrentArticle } from '../single-article/actions';
 
 import {
   titleInput,
@@ -17,12 +18,18 @@ import {
 
 const tagList = ['tag1', 'tag2'];
 
-const ArticleForm = ({ loginCondition, fetchNewArticle, fetchEditArticle }) => {
+const ArticleForm = ({
+  loginCondition,
+  fetchNewArticle,
+  currentArticle,
+  fetchEditArticle,
+}) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
   const onFinish = (values) => {
-    fetchNewArticle(values);
+    return pathname.includes('edit')
+      ? fetchNewArticle(values)
+      : fetchEditArticle(currentArticle.slug, values);
   };
 
   useEffect(() => {
@@ -43,7 +50,13 @@ const ArticleForm = ({ loginCondition, fetchNewArticle, fetchEditArticle }) => {
         layout="vertical"
         initialValues={{ remember: true }}
         onFinish={onFinish}
-        fields={[{ name: ['tagList'], value: tagList }]}>
+        fields={[
+          { name: ['tagList'], value: tagList },
+          { name: ['title'], value: currentArticle.title },
+          { name: ['description'], value: currentArticle.description },
+          { name: ['body'], value: currentArticle.body },
+          { name: ['tagList'], value: currentArticle.tagList },
+        ]}>
         {titleInput}
         {descriptionInput}
         {bodyInput}
@@ -58,13 +71,17 @@ ArticleForm.propTypes = {
   loginCondition: PropTypes.bool.isRequired,
   fetchNewArticle: PropTypes.func.isRequired,
   fetchEditArticle: PropTypes.func.isRequired,
+  fetchCurrentArticle: PropTypes.func.isRequired,
+  currentArticle: PropTypes.shape().isRequired,
 };
 
 const mapStateToProps = (state) => {
-  const { loginCondition } = state;
-  return { loginCondition };
+  const { loginCondition, currentArticle } = state;
+  return { loginCondition, currentArticle };
 };
 
-export default connect(mapStateToProps, { fetchNewArticle, fetchEditArticle })(
-  ArticleForm
-);
+export default connect(mapStateToProps, {
+  fetchNewArticle,
+  fetchEditArticle,
+  fetchCurrentArticle,
+})(ArticleForm);

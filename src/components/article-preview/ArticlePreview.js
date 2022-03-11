@@ -37,7 +37,7 @@ const ArtilcePreview = ({ article, isPreview, loginCondition }) => {
     if (loginCondition) {
       setCurrentUser(JSON.parse(localStorage.getItem('currentUser')));
     }
-  });
+  }, []);
 
   const { Text, Paragraph, Title } = Typography;
   return (
@@ -102,7 +102,9 @@ const ArtilcePreview = ({ article, isPreview, loginCondition }) => {
           {pathname === `/articles/${slug}` &&
           currentUser.username === username ? (
             <Space>
-              <Button className="sign-in-button">Edit</Button>
+              <Link to={`/articles/${slug}/edit`}>
+                <Button className="sign-in-button">Edit</Button>
+              </Link>
               <Button className="sign-in-button">Delete</Button>
             </Space>
           ) : null}

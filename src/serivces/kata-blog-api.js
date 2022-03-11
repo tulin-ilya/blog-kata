@@ -193,16 +193,15 @@ export default class KataBlogService {
     return await response;
   }
 
-  async updArticle(articleSlug, title = null, description = null, body = null) {
-    const initialllValue = await this.getArticle(articleSlug);
-    const { initTitle, initDescription, initBody } = initialllValue.article;
+  async updArticle(articleSlug, title, description, body) {
     const queryOptions = {
       requestType: PUT,
+      articleSlug,
       requestBody: {
         article: {
-          title: title || initTitle,
-          description: description || initDescription,
-          body: body || initBody,
+          title: title,
+          description: description,
+          body: body,
         },
       },
     };

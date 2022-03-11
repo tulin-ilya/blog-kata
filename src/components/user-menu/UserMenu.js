@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { setLoginCondition } from '../../pages/profile-form/actions';
+import { setCurrentArticle } from '../../pages/single-article/actions';
 
 import { Button, Menu, Dropdown, Avatar, Typography, Space } from 'antd';
 import { UserOutlined, EditOutlined, LogoutOutlined } from '@ant-design/icons';
 
-const UserMenu = ({ setLoginCondition, loginCondition }) => {
+const UserMenu = ({ setLoginCondition, loginCondition, setCurrentArticle }) => {
+  const navigate = useNavigate();
   const { Text } = Typography;
 
   const { username, image } =
@@ -44,7 +46,13 @@ const UserMenu = ({ setLoginCondition, loginCondition }) => {
   const userMenu = loginCondition ? (
     <React.Fragment>
       <Link to="/new-article">
-        <Button size="small" className="create-article-button">
+        <Button
+          onClick={() => {
+            setCurrentArticle({});
+            navigate('/new-article');
+          }}
+          size="small"
+          className="create-article-button">
           Create article
         </Button>
       </Link>
@@ -80,6 +88,7 @@ const UserMenu = ({ setLoginCondition, loginCondition }) => {
 UserMenu.propTypes = {
   loginCondition: PropTypes.bool.isRequired,
   setLoginCondition: PropTypes.func.isRequired,
+  setCurrentArticle: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -89,4 +98,5 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
   setLoginCondition,
+  setCurrentArticle,
 })(UserMenu);
