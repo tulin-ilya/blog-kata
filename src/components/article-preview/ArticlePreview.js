@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+import { format } from 'date-fns';
+
 import { fetchDeleteArticle, fetchFavoriteArticle } from './actions';
 import { fetchArticles } from '../../pages/articles-list/actions';
 
@@ -115,7 +117,9 @@ const ArtilcePreview = ({
                 flexDirection: 'column',
               }}>
               <Text strong>{username}</Text>
-              <Text type="secondary">{createdAt}</Text>
+              <Text type="secondary">
+                {format(new Date(createdAt), 'dd MMMM yyyy')}
+              </Text>
             </Col>
             <Col>
               <Avatar size={46} src={image} />
