@@ -1,10 +1,10 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { fetchDeleteArticle } from './actions';
+import { fetchDeleteArticle, fetchFavoriteArticle } from './actions';
+import { fetchArticles } from '../../pages/articles-list/actions';
 
 import {
   Col,
@@ -26,6 +26,7 @@ const ArtilcePreview = ({
   isPreview,
   loginCondition,
   fetchDeleteArticle,
+  fetchFavoriteArticle,
 }) => {
   const {
     slug,
@@ -35,12 +36,15 @@ const ArtilcePreview = ({
     author,
     createdAt,
     description,
+    favorited,
   } = article;
   const { username, image } = author;
 
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState({});
+  const [favoritesCountState, setFavoritesCountState] =
+    useState(favoritesCount);
 
   useEffect(() => {
     if (loginCondition) {
@@ -68,9 +72,15 @@ const ArtilcePreview = ({
                 count={1}
                 style={{ color: '#FF0707' }}
                 character={<HeartFilled />}
+                defaultValue={favorited}
+                onChange={(value) => {
+                  console.log(value);
+                  fetchFavoriteArticle(value, slug);
+                  setFavoritesCountState(favoritesCount + value);
+                }}
               />
               <Text type="secondary" className="ant-rate-text">
-                {favoritesCount}
+                {favoritesCountState}
               </Text>
             </span>
           </Space>
@@ -137,6 +147,8 @@ ArtilcePreview.propTypes = {
   isPreview: PropTypes.bool.isRequired,
   loginCondition: PropTypes.bool.isRequired,
   fetchDeleteArticle: PropTypes.func.isRequired,
+  fetchFavoriteArticle: PropTypes.func.isRequired,
+  fetchArticles: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -144,4 +156,8 @@ const mapStateToProps = (state) => {
   return { loginCondition };
 };
 
-export default connect(mapStateToProps, { fetchDeleteArticle })(ArtilcePreview);
+export default connect(mapStateToProps, {
+  fetchDeleteArticle,
+  fetchFavoriteArticle,
+  fetchArticles,
+})(ArtilcePreview);

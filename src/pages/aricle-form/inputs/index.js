@@ -37,7 +37,7 @@ export const bodyInput = (
 );
 
 export const submitInput = (
-  <Button type="primary" htmlType="submit">
+  <Button type="primary" htmlType="submit" block>
     Send
   </Button>
 );
@@ -73,11 +73,7 @@ const tagField = (fields, { add, remove }) => {
         );
       })}
       <Form.Item>
-        <Button
-          type="dashed"
-          onClick={() => add()}
-          block
-          icon={<PlusOutlined />}>
+        <Button type="dashed" onClick={() => add()} icon={<PlusOutlined />}>
           Add tag
         </Button>
       </Form.Item>

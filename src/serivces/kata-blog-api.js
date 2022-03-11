@@ -226,6 +226,7 @@ export default class KataBlogService {
   }
 
   async favoriteArticle(articleSlug) {
+    console.log(articleSlug);
     const queryOptions = {
       requestType: POST,
       articleSlug,
