@@ -72,10 +72,14 @@ const ArtilcePreview = ({
                 count={1}
                 style={{ color: '#FF0707' }}
                 character={<HeartFilled />}
-                defaultValue={favorited}
+                defaultValue={favorited ? 1 : 0}
                 onChange={(value) => {
                   fetchFavoriteArticle(value, slug);
-                  setFavoritesCountState(favoritesCount + value);
+                  setFavoritesCountState(
+                    value === 1
+                      ? favoritesCountState + 1
+                      : favoritesCountState - 1
+                  );
                 }}
               />
               <Text type="secondary" className="ant-rate-text">
