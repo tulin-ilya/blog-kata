@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import KataBlogService from '../../../serivces/kata-blog-api';
 
 const kataBlogService = new KataBlogService();
