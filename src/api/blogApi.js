@@ -22,7 +22,7 @@ class BlogApi {
   _apiBase = 'https://kata.academy:8021/api';
   _token = localStorage.getItem('token');
 
-  setQueryUrl(queryPath, queryOptions) {
+  setQueryUrl = (queryPath, queryOptions) => {
     const { articleSlug, offset } = queryOptions;
     let url = '';
     switch (queryPath) {
@@ -58,9 +58,9 @@ class BlogApi {
         url = `${this._apiBase}/articles`;
     }
     return url;
-  }
+  };
 
-  async getResponse(queryPath, queryOptions) {
+  getResponse = async (queryPath, queryOptions) => {
     const url = this.setQueryUrl(queryPath, queryOptions);
     const headers = {
       'Content-type': 'application/json',
@@ -112,14 +112,14 @@ class BlogApi {
     }
 
     return result;
-  }
+  };
 
-  _setCurrentUserToLS(currentUser) {
+  _setCurrentUserToLS = (currentUser) => {
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
     localStorage.setItem('token', currentUser.token);
-  }
+  };
 
-  async createUser(username, email, password) {
+  createUser = async (username, email, password) => {
     const queryOptions = {
       requestType: POST,
       requestBody: {
@@ -129,9 +129,9 @@ class BlogApi {
     const response = await this.getResponse(CREATE_USER, queryOptions);
     this._setCurrentUserToLS(response.user);
     return await response;
-  }
+  };
 
-  async login(email, password) {
+  login = async (email, password) => {
     const queryOptions = {
       requestType: POST,
       requestBody: {
@@ -143,9 +143,14 @@ class BlogApi {
       this._setCurrentUserToLS(response.user);
     }
     return await response;
-  }
+  };
 
-  async updCurrentUser(email = null, username = null, image = null, password) {
+  updCurrentUser = async (
+    email = null,
+    username = null,
+    image = null,
+    password
+  ) => {
     const queryOptions = {
       requestType: PUT,
       requestBody: {
@@ -162,34 +167,34 @@ class BlogApi {
       this._setCurrentUserToLS(response.user);
     }
     return await response;
-  }
+  };
 
-  async getArticles(offset = 0) {
+  getArticles = async (offset = 0) => {
     const response = await this.getResponse(GET_ARTICLES, {
       requestType: GET,
       offset,
     });
     return await response;
-  }
+  };
 
-  async getArticle(articleSlug) {
+  getArticle = async (articleSlug) => {
     const response = await this.getResponse(GET_ARTICLE, {
       requestType: GET,
       articleSlug,
     });
     return await response;
-  }
+  };
 
-  async createNewArticle(title, description, body, tagList) {
+  createNewArticle = async (title, description, body, tagList) => {
     const queryOptions = {
       requestType: POST,
       requestBody: { article: { title, description, body, tagList } },
     };
     const response = await this.getResponse(CREATE_NEW_ARTICLE, queryOptions);
     return await response;
-  }
+  };
 
-  async updArticle(articleSlug, title, description, body) {
+  updArticle = async (articleSlug, title, description, body) => {
     const queryOptions = {
       requestType: PUT,
       articleSlug,
@@ -203,17 +208,17 @@ class BlogApi {
     };
     const responce = await this.getResponse(UPD_ARTICLE, queryOptions);
     return await responce;
-  }
+  };
 
-  async deleteArticle(articleSlug) {
+  deleteArticle = async (articleSlug) => {
     const response = await this.getResponse(DELETE_ARTICLE, {
       requestType: DELETE,
       articleSlug,
     });
     return await response;
-  }
+  };
 
-  async favoriteArticle(articleSlug) {
+  favoriteArticle = async (articleSlug) => {
     console.log(articleSlug);
     const queryOptions = {
       requestType: POST,
@@ -221,9 +226,9 @@ class BlogApi {
     };
     const responce = await this.getResponse(FAVORITE_AN_ARTICLE, queryOptions);
     return await responce;
-  }
+  };
 
-  async unfavoriteArticle(articleSlug) {
+  unfavoriteArticle = async (articleSlug) => {
     const queryOptions = {
       requestType: DELETE,
       articleSlug,
@@ -233,7 +238,7 @@ class BlogApi {
       queryOptions
     );
     return await responce;
-  }
+  };
 }
 
 export const blogApi = new BlogApi();

@@ -1,4 +1,4 @@
-import { SET_LOADING_CONDITION } from '../containers/app/actions';
+import { SET_LOADING_CONDITION } from '../constants';
 
 function loadingCondition(state = true, action) {
   switch (action.type) {

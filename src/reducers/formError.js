@@ -1,4 +1,4 @@
-import { SET_FORM_ERROR } from "../pages/profile-form/actions";
+import { SET_FORM_ERROR } from '../constants';
 
 function formError(state = {}, action) {
   switch (action.type) {

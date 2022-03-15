@@ -1,4 +1,4 @@
-import { USER_LOGIN } from '../pages/profile-form/actions';
+import { USER_LOGIN } from '../constants';
 
 function loginCondition(state = false, action) {
   switch (action.type) {

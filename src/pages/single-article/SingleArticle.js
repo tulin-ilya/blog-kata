@@ -7,17 +7,17 @@ import { Card, Spin, Typography } from 'antd';
 
 import ArtilcePreview from '../../components/article-preview';
 
-import { fetchCurrentArticle } from './actions';
-import { setLoadingCondition } from '../../containers/app/actions';
+import { getCurrentArticle } from '../../actions/getCurrentArticle';
+import { setLoadingCondition } from '../../actions/setLoadingCondition';
 
-const SingleArticle = ({ fetchCurrentArticle, currentArticle }) => {
+const SingleArticle = ({ getCurrentArticle, currentArticle }) => {
   const { Paragraph } = Typography;
 
   const { articleSlug } = useParams();
 
   useEffect(() => {
     setLoadingCondition(true);
-    fetchCurrentArticle(articleSlug);
+    getCurrentArticle(articleSlug);
   }, []);
 
   const renderElement =
@@ -36,7 +36,7 @@ const SingleArticle = ({ fetchCurrentArticle, currentArticle }) => {
 };
 
 SingleArticle.propTypes = {
-  fetchCurrentArticle: PropTypes.func.isRequired,
+  getCurrentArticle: PropTypes.func.isRequired,
   currentArticle: PropTypes.shape(),
 };
 
@@ -48,6 +48,6 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-  fetchCurrentArticle,
+  getCurrentArticle,
   setLoadingCondition,
 })(SingleArticle);

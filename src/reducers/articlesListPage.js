@@ -1,4 +1,4 @@
-import { SET_ARTICLES_LIST_PAGE } from '../pages/articles-list/actions';
+import { SET_ARTICLES_LIST_PAGE } from '../constants';
 
 function articlesListPage(state = 1, action) {
   switch (action.type) {

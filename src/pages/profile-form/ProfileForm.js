@@ -3,12 +3,10 @@ import { connect } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import {
-  fetchUserLogin,
-  fetchUserRegistration,
-  fetchEditProfile,
-  setFormError,
-} from './actions';
+import { setFormError } from '../../actions/setFormError';
+import { userLogin } from '../../actions/userLogin';
+import { userCreate } from '../../actions/userCreate';
+import { userEdit } from '../../actions/userEdit';
 
 import { Card, Form, Typography } from 'antd';
 
@@ -19,9 +17,9 @@ import { userEditForm } from '../components/userEditForm';
 const { Title } = Typography;
 
 const ProfileForm = ({
-  fetchUserLogin,
-  fetchUserRegistration,
-  fetchEditProfile,
+  userLogin,
+  userCreate,
+  userEdit,
   loginCondition,
   setFormError,
   formError,
@@ -37,18 +35,18 @@ const ProfileForm = ({
       case '/login':
         renderStack.renderForm = userLoginForm(formError, pathname);
         renderStack.renderTitle = 'Sign In';
-        renderStack.onFinish = (values) => fetchUserLogin(values);
+        renderStack.onFinish = (values) => userLogin(values);
         break;
       case '/registration':
         renderStack.renderForm = userCreateForm(formError, pathname);
         renderStack.renderTitle = 'Create new account';
-        renderStack.onFinish = (values) => fetchUserRegistration(values);
+        renderStack.onFinish = (values) => userCreate(values);
         break;
       case '/edit-profile':
         renderStack.renderForm = userEditForm(formError, pathname);
         renderStack.renderTitle = 'Edit Profile';
         renderStack.onFinish = (values) => {
-          fetchEditProfile(values);
+          userEdit(values);
           navigate('/articles');
         };
     }
@@ -92,9 +90,9 @@ const ProfileForm = ({
 };
 
 ProfileForm.propTypes = {
-  fetchUserLogin: PropTypes.func.isRequired,
-  fetchUserRegistration: PropTypes.func.isRequired,
-  fetchEditProfile: PropTypes.func.isRequired,
+  userLogin: PropTypes.func.isRequired,
+  userCreate: PropTypes.func.isRequired,
+  userEdit: PropTypes.func.isRequired,
   loginCondition: PropTypes.bool.isRequired,
   setFormError: PropTypes.func.isRequired,
   formError: PropTypes.shape().isRequired,
@@ -106,8 +104,8 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-  fetchUserLogin,
-  fetchUserRegistration,
-  fetchEditProfile,
+  userLogin,
+  userCreate,
+  userEdit,
   setFormError,
 })(ProfileForm);

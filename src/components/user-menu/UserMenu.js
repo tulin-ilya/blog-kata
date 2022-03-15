@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { setLoginCondition } from '../../pages/profile-form/actions';
-import { setCurrentArticle } from '../../pages/single-article/actions';
+import { setLoginCondition } from '../../actions/setLoginCondition';
+import { setCurrentArticle } from '../../actions/setCurrentArticle';
 
 import { Button, Menu, Dropdown, Avatar, Typography, Space } from 'antd';
 import { UserOutlined, EditOutlined, LogoutOutlined } from '@ant-design/icons';

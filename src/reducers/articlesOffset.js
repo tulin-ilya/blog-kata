@@ -1,4 +1,4 @@
-import { SET_ARTICLES_OFFSET } from '../pages/articles-list/actions';
+import { SET_ARTICLES_OFFSET } from '../constants';
 
 function articlesOffset(state = 0, action) {
   switch (action.type) {

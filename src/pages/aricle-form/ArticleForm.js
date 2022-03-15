@@ -4,8 +4,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Card, Form, Typography } from 'antd';
 
-import { fetchNewArticle, fetchEditArticle } from './actions';
-import { fetchCurrentArticle } from '../single-article/actions';
+import { articleCreate } from '../../actions/articleCreate';
+import { articleEdit } from '../../actions/articleEdit';
 
 import { articleBodyInput } from '../components/articleBodyInput';
 import { articleDescriptionInput } from '../components/articleDescriptionInput';
@@ -15,18 +15,18 @@ import { articleTitleInput } from '../components/articleTitleInput';
 
 const ArticleForm = ({
   loginCondition,
-  fetchNewArticle,
+  articleCreate,
   currentArticle,
-  fetchEditArticle,
+  articleEdit,
 }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const onFinish = (values) => {
     if (!pathname.includes('edit')) {
-      fetchNewArticle(values);
+      articleCreate(values);
       navigate('/articles');
     } else {
-      fetchEditArticle(currentArticle.slug, values);
+      articleEdit(currentArticle.slug, values);
       navigate(`/articles/${currentArticle.slug}`);
     }
   };
@@ -68,9 +68,8 @@ const ArticleForm = ({
 
 ArticleForm.propTypes = {
   loginCondition: PropTypes.bool.isRequired,
-  fetchNewArticle: PropTypes.func.isRequired,
-  fetchEditArticle: PropTypes.func.isRequired,
-  fetchCurrentArticle: PropTypes.func.isRequired,
+  articleCreate: PropTypes.func.isRequired,
+  articleEdit: PropTypes.func.isRequired,
   currentArticle: PropTypes.shape().isRequired,
 };
 
@@ -80,7 +79,6 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-  fetchNewArticle,
-  fetchEditArticle,
-  fetchCurrentArticle,
+  articleCreate,
+  articleEdit,
 })(ArticleForm);

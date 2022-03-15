@@ -6,15 +6,13 @@ import { Card, List } from 'antd';
 
 import ArtilcePreview from '../../components/article-preview';
 
-import {
-  fetchArticles,
-  setArticlesOffset,
-  setArticlesListPage,
-} from './actions';
-import { setLoadingCondition } from '../../containers/app/actions';
+import { getArticles } from '../../actions/getArticles';
+import { setLoadingCondition } from '../../actions/setLoadingCondition';
+import { setArticlesOffset } from '../../actions/setArticlesOffset';
+import { setArticlesListPage } from '../../actions/setArticlesListPage';
 
 const ArticlesList = ({
-  fetchArticles,
+  getArticles,
   setArticlesOffset,
   setArticlesListPage,
   articlesList,
@@ -26,11 +24,11 @@ const ArticlesList = ({
 }) => {
   useEffect(() => {
     setLoadingCondition(true);
-    fetchArticles();
+    getArticles();
   }, []);
 
   useEffect(() => {
-    fetchArticles(articlesOffset);
+    getArticles(articlesOffset);
     window.scrollTo(0, 0);
   }, [articlesOffset]);
 
@@ -73,7 +71,7 @@ const ArticlesList = ({
 };
 
 ArticlesList.propTypes = {
-  fetchArticles: PropTypes.func.isRequired,
+  getArticles: PropTypes.func.isRequired,
   setArticlesOffset: PropTypes.func.isRequired,
   articlesList: PropTypes.array.isRequired,
   articlesCount: PropTypes.number.isRequired,
@@ -102,7 +100,7 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-  fetchArticles,
+  getArticles,
   setArticlesOffset,
   setArticlesListPage,
   setLoadingCondition,

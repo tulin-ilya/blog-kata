@@ -5,8 +5,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { format } from 'date-fns';
 
-import { fetchDeleteArticle, fetchFavoriteArticle } from './actions';
-import { fetchArticles } from '../../pages/articles-list/actions';
+import { articleDelete } from '../../actions/articleDelete';
+import { articleFavorite } from '../../actions/articleFavorite';
 
 import {
   Col,
@@ -27,8 +27,8 @@ const ArtilcePreview = ({
   article,
   isPreview,
   loginCondition,
-  fetchDeleteArticle,
-  fetchFavoriteArticle,
+  articleDelete,
+  articleFavorite,
 }) => {
   const {
     slug,
@@ -76,7 +76,7 @@ const ArtilcePreview = ({
                 character={<HeartFilled />}
                 defaultValue={favorited ? 1 : 0}
                 onChange={(value) => {
-                  fetchFavoriteArticle(value, slug);
+                  articleFavorite(value, slug);
                   setFavoritesCountState(
                     value === 1
                       ? favoritesCountState + 1
@@ -134,7 +134,7 @@ const ArtilcePreview = ({
               <Popconfirm
                 title="Are you sure to delete this article?"
                 onConfirm={() => {
-                  fetchDeleteArticle(slug);
+                  articleDelete(slug);
                   navigate('/articles');
                 }}
                 okText="Yes"
@@ -153,9 +153,8 @@ ArtilcePreview.propTypes = {
   article: PropTypes.shape().isRequired,
   isPreview: PropTypes.bool.isRequired,
   loginCondition: PropTypes.bool.isRequired,
-  fetchDeleteArticle: PropTypes.func.isRequired,
-  fetchFavoriteArticle: PropTypes.func.isRequired,
-  fetchArticles: PropTypes.func.isRequired,
+  articleDelete: PropTypes.func.isRequired,
+  articleFavorite: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -164,7 +163,6 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-  fetchDeleteArticle,
-  fetchFavoriteArticle,
-  fetchArticles,
+  articleDelete,
+  articleFavorite,
 })(ArtilcePreview);

@@ -6,7 +6,6 @@ import { Layout } from 'antd';
 import AppHeader from '../../components/app-header';
 import AppContent from '../app-content';
 import AppFooter from '../../components/app-footer';
-// import ArticlesList from '../../pages/articles-list/ArticlesList';
 
 const App = () => {
   const { Header, Content, Footer } = Layout;
