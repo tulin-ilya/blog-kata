@@ -1,3 +1,3 @@
-export const USER_LOGIN = 'USER_LOGIN';
+import { USER_LOGIN } from '../constants';
 
 export const setLoginCondition = (isLogin) => ({ type: USER_LOGIN, isLogin });

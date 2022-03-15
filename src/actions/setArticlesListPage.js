@@ -1,4 +1,4 @@
-export const SET_ARTICLES_LIST_PAGE = 'SET_ARTICLE_LIST_PAGE';
+import { SET_ARTICLES_LIST_PAGE } from '../constants';
 
 export const setArticlesListPage = (articlesListPage) => ({
   type: SET_ARTICLES_LIST_PAGE,

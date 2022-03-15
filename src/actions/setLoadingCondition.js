@@ -1,4 +1,4 @@
-export const SET_LOADING_CONDITION = 'SET_LOADING_CONDITION';
+import { SET_LOADING_CONDITION } from '../constants';
 
 export const setLoadingCondition = (loadingCondition) => ({
   type: SET_LOADING_CONDITION,

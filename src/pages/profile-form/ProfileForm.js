@@ -12,7 +12,11 @@ import {
 
 import { Card, Form, Typography } from 'antd';
 
-import { registerForm, loginForm, editForm } from './forms';
+import { userCreateForm } from '../components/userCreateForm';
+import { userLoginForm } from '../components/userLoginForm';
+import { userEditForm } from '../components/userEditForm';
+
+const { Title } = Typography;
 
 const ProfileForm = ({
   fetchUserLogin,
@@ -31,17 +35,17 @@ const ProfileForm = ({
     const renderStack = {};
     switch (pathname) {
       case '/login':
-        renderStack.renderForm = loginForm(formError, pathname);
+        renderStack.renderForm = userLoginForm(formError, pathname);
         renderStack.renderTitle = 'Sign In';
         renderStack.onFinish = (values) => fetchUserLogin(values);
         break;
       case '/registration':
-        renderStack.renderForm = registerForm(formError, pathname);
+        renderStack.renderForm = userCreateForm(formError, pathname);
         renderStack.renderTitle = 'Create new account';
         renderStack.onFinish = (values) => fetchUserRegistration(values);
         break;
       case '/edit-profile':
-        renderStack.renderForm = editForm(formError, pathname);
+        renderStack.renderForm = userEditForm(formError, pathname);
         renderStack.renderTitle = 'Edit Profile';
         renderStack.onFinish = (values) => {
           fetchEditProfile(values);
@@ -65,8 +69,6 @@ const ProfileForm = ({
       navigate('/articles');
     }
   }, [loginCondition]);
-
-  const { Title } = Typography;
 
   return (
     <Card className="profile-form">

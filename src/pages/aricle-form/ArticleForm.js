@@ -1,22 +1,17 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Card, Form, Typography } from 'antd';
 
 import { fetchNewArticle, fetchEditArticle } from './actions';
 import { fetchCurrentArticle } from '../single-article/actions';
 
-import {
-  titleInput,
-  descriptionInput,
-  bodyInput,
-  submitInput,
-  tagListInput,
-} from './inputs';
-
-const tagList = ['tag1', 'tag2'];
+import { articleBodyInput } from '../components/articleBodyInput';
+import { articleDescriptionInput } from '../components/articleDescriptionInput';
+import { articleSubmitInput } from '../components/articleSubmitInput';
+import { articleTagListInput } from '../components/articleTagListInput';
+import { articleTitleInput } from '../components/articleTitleInput';
 
 const ArticleForm = ({
   loginCondition,
@@ -55,17 +50,17 @@ const ArticleForm = ({
         initialValues={{ remember: true }}
         onFinish={onFinish}
         fields={[
-          { name: ['tagList'], value: tagList },
+          { name: ['tagList'], value: currentArticle.tagList },
           { name: ['title'], value: currentArticle.title },
           { name: ['description'], value: currentArticle.description },
           { name: ['body'], value: currentArticle.body },
           { name: ['tagList'], value: currentArticle.tagList },
         ]}>
-        {titleInput}
-        {descriptionInput}
-        {bodyInput}
-        {tagListInput}
-        {submitInput}
+        {articleTitleInput}
+        {articleDescriptionInput}
+        {articleBodyInput}
+        {articleTagListInput}
+        {articleSubmitInput}
       </Form>
     </Card>
   );
